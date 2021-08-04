@@ -222,14 +222,13 @@ def is_dmarc_record_strong(domain):
 def main_check(domain):
     global out
     out = {}
-    msg = {}
 
     spf_record_strong = is_spf_record_strong(domain)
     dmarc_record_strong = is_dmarc_record_strong(domain)
 
     if spf_record_strong and dmarc_record_strong:
-        msg['message'] = f"Spoofing not possible for {domain}"
+        out['message'] = f"Spoofing not possible for {domain}"
     else:
-        msg['message'] = f"Spoofing possible for {domain}!"
+        out['message'] = f"Spoofing possible for {domain}!"
 
-    return [msg, out]
+    return out

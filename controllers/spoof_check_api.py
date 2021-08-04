@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse, request, inputs
 import socket
 import pymongo
+from enum import Enum
 from datetime import datetime, timedelta
 import validators
 from helpers import auth_check, spoofcheck
@@ -11,6 +12,9 @@ portscan_args = reqparse.RequestParser()
 portscan_args.add_argument('value', help='Domain or IP is required to scan', required=True)
 portscan_args.add_argument('force', type=inputs.boolean, default=False)
 
+class Risk(Enum):
+    FAIL = "FAIL"
+    PASS = "PASS"
 
 class SpoofCheck(Resource):
 
@@ -51,7 +55,8 @@ class SpoofCheck(Resource):
 
                 out = spoofcheck.main_check(val)
 
-                list_scans['spoofCheck'] = out
+                list_scans.update(out)
+                list_scans['risk'] = Risk.FAIL.name if list_scans['message'].count("possible")>0 else Risk.PASS.name
             else:
                 return {
                            'message': f'{val} is not a valid IP or Domain, please try again'
