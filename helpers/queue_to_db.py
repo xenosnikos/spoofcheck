@@ -9,5 +9,5 @@ def spoofcheck_response_db_addition(value, output):
                             {'$set': {'status': common_strings.strings['status_finished'],
                                     'timeStamp': datetime.utcnow(), 'output': output}})
     except Exception as e:
-        logger = logging.getLogger(common_strings.strings['whois'])
+        logger = logging.getLogger(common_strings.strings['spoofcheck'])
         logger.critical(common_strings.strings['database_issue'], exc_info=e)
